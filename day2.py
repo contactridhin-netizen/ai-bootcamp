@@ -7,3 +7,7 @@ data = response.json()
 
 print("Username:", data["login"])
 print("Public repos:", data["public_repos"])
+
+print(response)
+print(response.text)
+print(data)
