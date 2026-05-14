@@ -24,14 +24,15 @@ A simple Python CLI tool that fetches and displays GitHub user information using
 
 ## Example
 
-Enter GitHub username: torvalds
+```text
 ========================================
 GitHub User Info
 ========================================
-Username       : torvalds
-Public Repos   : 11
-Followers      : 302834
+Username       : xyz
+Public Repos   : 10
+Followers      : 50
 ========================================
+```
 
 ## Future Improvements
 
