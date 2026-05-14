@@ -1,3 +1,6 @@
+# GitHub User Analyzer
+# Fetches and displays GitHub user data using API
+
 import requests
 
 
