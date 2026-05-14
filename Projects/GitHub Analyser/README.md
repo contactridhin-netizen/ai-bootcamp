@@ -25,7 +25,6 @@ A simple Python CLI tool that fetches and displays GitHub user information using
 ## Example
 
 Enter GitHub username: torvalds
-
 ========================================
 GitHub User Info
 ========================================
