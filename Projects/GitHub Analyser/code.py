@@ -10,65 +10,82 @@ def fetch_github_user(username):
     try:
         response = requests.get(url)
 
-        if response.status_code == 404:
-            return "not_found"
-
         if response.status_code != 200:
-            return "error"
+            return None
 
-        data = response.json()
+        return response.json()
 
-        return {
-            "name": data.get("login"),
-            "repos": data.get("public_repos"),
-            "followers": data.get("followers")
-        }
-
-    except Exception:
-        return "error"
-
-
-def display_user_info(user_data):
-    print("\n" + "=" * 40)
-    print("GitHub User Info")
-    print("=" * 40)
-    print(f"Username       : {user_data['name']}")
-    print(f"Public Repos   : {user_data['repos']}")
-    print(f"Followers      : {user_data['followers']}")
-    print("=" * 40 + "\n")
-
-
-def get_username():
-    username = input("Enter GitHub username: ").strip()
-
-    if username == "":
-        print("Username cannot be empty.\n")
+    except:
         return None
 
-    return username
+
+def fetch_repos(username):
+    url = f"https://api.github.com/users/{username}/repos"
+
+    try:
+        response = requests.get(url)
+
+        if response.status_code != 200:
+            return []
+
+        repos = response.json()
+
+        # sort by stars (simple sorting)
+        repos.sort(key=lambda x: x["stargazers_count"], reverse=True)
+
+        return repos[:5]  # top 5 repos
+
+    except:
+        return []
+
+
+def display_user(data, repos):
+    print("\n" + "=" * 50)
+    print(" GITHUB USER ANALYSIS ")
+    print("=" * 50)
+
+    print(f"Username   : {data.get('login')}")
+    print(f"Name       : {data.get('name')}")
+    print(f"Company    : {data.get('company')}")
+    print(f"Location   : {data.get('location')}")
+    print(f"Followers  : {data.get('followers')}")
+    print(f"Repos      : {data.get('public_repos')}")
+
+    print("\nTop Repositories:")
+    print("-" * 50)
+
+    if not repos:
+        print("No repositories found")
+    else:
+        for repo in repos:
+            print(f"{repo['name']} ⭐ {repo['stargazers_count']}")
+
+    print("=" * 50 + "\n")
 
 
 def main():
-    print("GitHub Analyzer (type 'exit' to quit)\n")
+    print("GitHub Analyzer Pro (type 'exit' to quit)\n")
 
     while True:
-        username = get_username()
-
-        if username is None:
-            continue
+        username = input("Enter GitHub username: ").strip()
 
         if username.lower() == "exit":
             print("Goodbye!")
             break
 
-        result = fetch_github_user(username)
+        if username == "":
+            print("Please enter a valid username\n")
+            continue
 
-        if result == "not_found":
-            print("User not found. Try again.\n")
-        elif result == "error":
-            print("Something went wrong. Please try later.\n")
-        else:
-            display_user_info(result)
+        user_data = fetch_github_user(username)
+
+        if user_data is None:
+            print("User not found or API error\n")
+            continue
+
+        repos = fetch_repos(username)
+
+        display_user(user_data, repos)
 
 
 main()
