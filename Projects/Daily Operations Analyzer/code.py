@@ -19,18 +19,31 @@ def calculate_score(tasks, hours, errors):
     return round(score, 2)
 
 
+def get_performance_label(score):
+    if score >= 8:
+        return "🔥 Excellent Performance"
+    elif score >= 5:
+        return "✅ Good Performance"
+    elif score >= 2:
+        return "⚠️ Average Performance"
+    else:
+        return "❌ Needs Improvement"
+
+
 def main():
     print("OPS TRACKER PRO (type exit anytime later)\n")
 
     tasks, hours, errors = get_daily_data()
 
     score = calculate_score(tasks, hours, errors)
+    label = get_performance_label(score)
 
     print("\n--- Daily Report ---")
     print(f"Tasks: {tasks}")
     print(f"Hours: {hours}")
     print(f"Errors: {errors}")
     print(f"Productivity Score: {score}")
+    print(f"Status: {label}")
 
 
 main()
