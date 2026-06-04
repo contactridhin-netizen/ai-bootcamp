@@ -1,3 +1,4 @@
+daily_records = []
 def get_daily_data():
     print("\n--- Daily Operations Input ---")
 
@@ -31,19 +32,43 @@ def get_performance_label(score):
 
 
 def main():
-    print("OPS TRACKER PRO (type exit anytime later)\n")
+    print("OPS TRACKER PRO (type exit anytime)\n")
 
-    tasks, hours, errors = get_daily_data()
+    while True:
+        choice = input("\nAdd new entry? (yes/exit/view): ").lower()
 
-    score = calculate_score(tasks, hours, errors)
-    label = get_performance_label(score)
+        if choice == "exit":
+            print("Goodbye!")
+            break
 
-    print("\n--- Daily Report ---")
-    print(f"Tasks: {tasks}")
-    print(f"Hours: {hours}")
-    print(f"Errors: {errors}")
-    print(f"Productivity Score: {score}")
-    print(f"Status: {label}")
+        if choice == "view":
+            print("\n--- ALL RECORDS ---")
+            for i, record in enumerate(daily_records, 1):
+                print(f"Day {i}: {record}")
+            continue
+
+        if choice != "yes":
+            print("Invalid option")
+            continue
+
+        tasks, hours, errors = get_daily_data()
+
+        score = calculate_score(tasks, hours, errors)
+        label = get_performance_label(score)
+
+        record = {
+            "tasks": tasks,
+            "hours": hours,
+            "errors": errors,
+            "score": score,
+            "status": label
+        }
+
+        daily_records.append(record)
+
+        print("\n--- Daily Report ---")
+        print(f"Score: {score}")
+        print(f"Status: {label}")
 
 
 main()
