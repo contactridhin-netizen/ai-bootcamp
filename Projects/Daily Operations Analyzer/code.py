@@ -1,4 +1,15 @@
-daily_records = []
+import json
+def load_data():
+    try:
+        with open("data.json", "r") as f:
+            return json.load(f)
+    except:
+        return []
+        
+def save_data(records):
+    with open("data.json", "w") as f:
+        json.dump(records, f)
+        
 def get_daily_data():
     print("\n--- Daily Operations Input ---")
 
@@ -45,7 +56,9 @@ def analyze_trends(records):
     print(f"Average Score: {round(avg_score, 2)}")
     print(f"Best Score   : {best_score}")
     print(f"Worst Score  : {worst_score}")
-    
+ 
+daily_records = load_data()
+   
 def main():
     print("OPS TRACKER PRO (type exit anytime)\n")
 
@@ -84,6 +97,7 @@ def main():
         }
 
         daily_records.append(record)
+        save_data(daily_records)
 
         print("\n--- Daily Report ---")
         print(f"Score: {score}")
