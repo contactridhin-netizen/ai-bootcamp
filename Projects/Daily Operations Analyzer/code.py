@@ -30,12 +30,27 @@ def get_performance_label(score):
     else:
         return "❌ Needs Improvement"
 
+def analyze_trends(records):
+    if not records:
+        print("No data available.\n")
+        return
 
+    scores = [r["score"] for r in records]
+
+    avg_score = sum(scores) / len(scores)
+    best_score = max(scores)
+    worst_score = min(scores)
+
+    print("\n--- Performance Insights ---")
+    print(f"Average Score: {round(avg_score, 2)}")
+    print(f"Best Score   : {best_score}")
+    print(f"Worst Score  : {worst_score}")
+    
 def main():
     print("OPS TRACKER PRO (type exit anytime)\n")
 
     while True:
-        choice = input("\nAdd new entry? (yes/exit/view): ").lower()
+        choice = input("\nAdd new entry? (yes/view/analyze/exit): ").lower()
 
         if choice == "exit":
             print("Goodbye!")
@@ -45,6 +60,10 @@ def main():
             print("\n--- ALL RECORDS ---")
             for i, record in enumerate(daily_records, 1):
                 print(f"Day {i}: {record}")
+            continue
+        
+        if choice == "analyze":
+            analyze_trends(daily_records)
             continue
 
         if choice != "yes":
