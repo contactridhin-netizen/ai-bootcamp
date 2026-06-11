@@ -1,14 +1,15 @@
 import json
+from datetime import datetime
 def load_data():
     try:
         with open("data.json", "r") as f:
             return json.load(f)
-    except:
+    except FileNotFoundError:
         return []
         
 def save_data(records):
     with open("data.json", "w") as f:
-        json.dump(records, f)
+        json.dump(records, f, indent=4)
         
 def get_daily_data():
     print("\n--- Daily Operations Input ---")
@@ -52,15 +53,21 @@ def analyze_trends(records):
     best_score = max(scores)
     worst_score = min(scores)
 
-    print("\n--- Performance Insights ---")
-    print(f"Average Score: {round(avg_score, 2)}")
-    print(f"Best Score   : {best_score}")
-    print(f"Worst Score  : {worst_score}")
+    print("\n=== PERFORMANCE INSIGHTS ===")
+    print(f"Entries       : {len(scores)}")
+    print(f"Average Score : {round(avg_score, 2)}")
+    print(f"Best Score    : {best_score}")
+    print(f"Worst Score   : {worst_score}")
+    print("============================")
  
 daily_records = load_data()
    
 def main():
-    print("OPS TRACKER PRO (type exit anytime)\n")
+    print("""
+    ==============================
+       OPS TRACKER PRO v1.0
+    ==============================
+    """)
 
     while True:
         choice = input("\nAdd new entry? (yes/view/analyze/exit): ").lower()
@@ -72,7 +79,16 @@ def main():
         if choice == "view":
             print("\n--- ALL RECORDS ---")
             for i, record in enumerate(daily_records, 1):
-                print(f"Day {i}: {record}")
+                print(f"""
+                Day {i}
+                Date   : {record['date']}
+                Tasks  : {record['tasks']}
+                Hours  : {record['hours']}
+                Errors : {record['errors']}
+                Score  : {record['score']}
+                Status : {record['status']}
+                ------------------------------
+                """)
             continue
         
         if choice == "analyze":
@@ -89,6 +105,7 @@ def main():
         label = get_performance_label(score)
 
         record = {
+            "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "tasks": tasks,
             "hours": hours,
             "errors": errors,
